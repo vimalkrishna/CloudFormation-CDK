@@ -1,19 +1,19 @@
 # CloudFormation-CDK
-Install and setup.
+Install and set up.
 
 ### We will make use of https://github.com/aws-samples/aws-cdk-examples
-### This has tonns of great examples to try and implemment 
-
+This has tonnes of great examples to try and implement. 
 ### There must be npm installed
-### We will need Docker installed for using Amazon Lambda Python Libraray
 npm --version
+### We will need Docker installed for using Amazon Lambda Python Library
 
 ### Installing CDK V2
 npm install -g aws-cdk
-### When using Window machine there will be UnauthorizedAccess exception when we test 
+### When using the Window machine there will be an UnauthorizedAccess exception when we test 
 cdk --version
-### In Window Machine power shell signed as administrator
+### In Window Machine Powershell signed as administrator
 Get-ExecutionPolicy  (Restricted)
+
 Set-ExecutionPolicy RemoteSigned 
 to Y
 
@@ -33,7 +33,6 @@ to Y
 https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-python.html
 
 ### See the services on AWS
-
 https://github.com/99designs/aws-vault/blob/master/USAGE.md
 
 aws-vault securely stores and manages AWS credentials in development environments. It stores IAM credentials in your operating system's secure keystore and generates temporary credentials to expose to your shell and applications. 
