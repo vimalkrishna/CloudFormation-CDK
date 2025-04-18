@@ -21,8 +21,8 @@ This is crucial for deploying your infrastructure as code, ensuring that your re
 # Environment: The environment parameter allows you to specify the AWS account and region where the stack will be deployed. This is useful for multi-account or multi-region deployments.
 '''
 app = cdk.App()
-#Stack definition, we can add many stacks here
-s3_stack = IotSimulatorCdk1Stack(app, "IotSimulatorCdk1Stack", env=env_aws)
+#Stack definition, we can add many stack s here
+my_stack = IotSimulatorCdk1Stack(app, "IotSimulatorCdk1Stack", env=env_aws)
 app.synth() 
 '''
 The synth() method is responsible for generating the CloudFormation templates based on the defined stacks and constructs. It translates your high-level CDK code into a low-level representation that AWS CloudFormation can understand.
