@@ -39,6 +39,10 @@ class DataProducerStack(Stack):
                 iam.ManagedPolicy.from_aws_managed_policy_name("CloudWatchFullAccess"),
             ]
         )
-        
-        
-
+                
+        alpha_vantage_layer = _lambda.LayerVersion(
+            self,
+            id="AlphaVantageLayer",
+            code=_lambda.AssetCode("layers/alpha_vantage_layer"),
+            #compatible_runtimes=[LAMBDA_RUNTIME],
+        )
