@@ -2,27 +2,18 @@
 import os
 
 import aws_cdk as cdk
+from aws_cdk import Tags, Environment
 
-from iot_infrastructure_cdk_2.iot_infrastructure_cdk_2_stack import IotInfrastructureCdk2Stack
-
+from data_producer.data_producer_stack import DataProducerStack
+from kinesis.kinesis_stack import KinesisStreamStack
+# account and region defined in the environment
+env_aws =Environment(account='327625635979', region='eu-central-1')
 
 app = cdk.App()
-IotInfrastructureCdk2Stack(app, "IotInfrastructureCdk2Stack",
-    # If you don't specify 'env', this stack will be environment-agnostic.
-    # Account/Region-dependent features and context lookups will not work,
-    # but a single synthesized template can be deployed anywhere.
+# Tags for the whole stack
+kinesis_stream = KinesisStreamStack(app, "KinesisStreamStack", env=env_aws)
+data_producer = DataProducerStack(app, "DataProducerStack", env=env_aws)
 
-    # Uncomment the next line to specialize this stack for the AWS Account
-    # and Region that are implied by the current CLI configuration.
-
-    #env=cdk.Environment(account=os.getenv('CDK_DEFAULT_ACCOUNT'), region=os.getenv('CDK_DEFAULT_REGION')),
-
-    # Uncomment the next line if you know exactly what Account and Region you
-    # want to deploy the stack to. */
-
-    #env=cdk.Environment(account='123456789012', region='us-east-1'),
-
-    # For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html
-    )
+Tags.of(app).add("ProjectOwner", "Vimal Krishna")
 
 app.synth()
