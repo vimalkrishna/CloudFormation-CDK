@@ -1,58 +1,84 @@
+# Implementing Real-Time Analytics in Blockchain Application.
+Visibility is very important in any real-time applications. In distributed application, it becomes critical. The goal of this application is to store streaming data, and create different types of data pipelines including ETL using AWS CDK. Once IaC is created, it can be used in any CI/CD pipeline. AWS CodePipeline is the preferred way as AWS managed services will be used here.
 
-# Welcome to your CDK Python project!
+Companion blog on this topic: [Implementing ETL pipeline with CDK](
+ https://aws-cloud-deployment.blogspot.com/2025/06/implementing-etl-pipeline-with-cdk.html)
 
-This is a blank project for CDK development with Python.
+ In this serverless stack created with AWS CDK, the data producer component fetches the data from (DOGECoin, Bitcoin, and Ethereum conversion rate to USD) from Alpha Vantage API, and pushes into Kinesis. From kinesis, another serverless component, data consumer fetches data and puts into DynamoDB. After having data in kinesis, we can implement different possiblites for visualisation /integration needs. 
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
+## Technical stack details
+1.  Python 3.8
+2.  Alpha Vantage API
+3.  CloudWatch
+4.  DynamoDb
+5.  S3
+6.  Athena
+7.  Apache Flink / Apache Zeppelin
+8.  AWs Glue/Spark
+9.  AWS CDK
+10. Lambda serverless 
+11. VSCode
+12. miniconda
 
-To manually create a virtualenv on MacOS and Linux:
 
+## Key components created
+1. data_consumer_stack
+2. data_producer_stack
+3. kinesis_stream_stack
+4. s3_bucket_stack
+
+
+![Arch diagram](img/.png)
+
+
+
+## Basic deployment steps
+1. Fetch alpha vantage [API key](https://www.alphavantage.co/support/#api-key)
+2. Clone (get) the git application.
+
+I have used monorepo for CDK project. It needs a Git Subdirectory Checkout for the developers. This is called sparse checkout.
+
+`git clone --filter=blob:none --no-checkout https://github.com/vimalkrishna/CloudFormation-CDK.git`
+
+`cd CloudFormation-CDK`
+
+`git sparse-checkout init --cone`
+
+`git sparse-checkout set blockchain-etl-pipeline`
+
+You can get Code as ZIP of the parent folder will all subprojects.
+Alternatively (best option) you can use use Github service called https://download-directory.github.io/ and paste the link 
+https://github.com/vimalkrishna/CloudFormation-CDK/tree/main/blockchain-etl-pipeline
+
+   Setup the AWS CLI with your account and credentials.
+
+   Also setup CDK by installing Node.js, the AWS CDK CLI, and configure your AWS credentials. See the official AWS website.
+   
+   Open the downloaded project in editor like VSCode, create .env file in the root folder, inside blockchain-etl-pipeline with the following contents.
+
+###  Add .env file to gitignore to avoid committing the following sensitive information
+    
 ```
-$ python3 -m venv .venv
+    INTRADAY_STREAM_NAME=kinesis-crypto-intraday
+    API_KEY=YOURKEY # 25 calls per day only 
+    (Producer calls every 2 minutes)
+    LAMBDA_RUNTIME=python3.8
+    LAMBDA_PRODUCER_NAME=crypto-data-producer
+    LAMBDA_CONSUMER_NAME=crypto-data-consumer
+    DYNAMODB_TABLE_NAME=crypto-table-blockchain
+    PRIMARY_BUCKET_NAME=crypto-data-blockchain
 ```
+3. cdk bootstrap
+4. cdk synth (Test all stacks)
+5. cdk deploy
+    - cdk deploy kinesis_stream_stack 
+    - cdk deploy data_consumer_stack
+    - cdk deploy data_producer_stack
+    - cdk deploy s3_bucket_stack
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+6. Manually, create system using AWS console to use Apache flink and Athena, Zeppline. These ETL extension I will add later in a blog as there are visual editors to be used.
 
-```
-$ source .venv/bin/activate
-```
 
-If you are a Windows platform, you would activate the virtualenv like this:
 
-```
-% .venv\Scripts\activate.bat
-```
 
-Once the virtualenv is activated, you can install the required dependencies.
-
-```
-$ pip install -r requirements.txt
-```
-
-At this point you can now synthesize the CloudFormation template for this code.
-
-```
-$ cdk synth
-```
-
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
-
-## Useful commands
-
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
-
-Enjoy!
