@@ -29,7 +29,7 @@ Companion blog on this topic: [Implementing ETL pipeline with CDK](
 4. s3_bucket_stack
 
 
-![Arch diagram](img/.png)
+![Arch diagram](img/ETL-PipelineSVG.drawio.svg)
 
 
 
@@ -77,7 +77,7 @@ https://github.com/vimalkrishna/CloudFormation-CDK/tree/main/blockchain-etl-pipe
     - cdk deploy data_producer_stack
     - cdk deploy s3_bucket_stack
 
-6. Manually, create system using AWS console to use Apache flink and Athena, Zeppline. These ETL extension I will add later in a blog as there are visual editors to be used.
+6. Manually, create system using AWS console to use Apache flink,  Athena, and Zeppline. These extension I will add later in a blog as there are visual editors to be used.
 
 
 
