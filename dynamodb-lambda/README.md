@@ -5,8 +5,10 @@ We will expand the database to Customer Profile Management with search function.
 We can use it for Device Registry.
 
  
-See the companion [Git Repository](https://devops-on-aws.blogspot.com/2025/06/understanding-devops-1.html "Discussion on implementing DevOps").
+See the companion [Git Repository](https://github.com/vimalkrishna/CloudFormation-CDK/tree/main/dynamodb-lambda "Discussion on implementing DynamoDB API"), 
 
+and Blog to discuss [implementation](https://aws-cloud-deployment.blogspot.com/2025/06/dynamodb-lambda-cdk-1.html)
+ and improvement plans.
 
 ## Project components:
 1. CDK Stack - Creates DynamoDB table with GSI and Lambda functions
