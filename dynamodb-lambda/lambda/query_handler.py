@@ -6,6 +6,7 @@ from decimal import Decimal
 from boto3.dynamodb.conditions import Key, Attr
 
 # Initialize DynamoDB resource
+# Pull table name from Lambda environment variable which is injected by CDK
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table(os.environ['TABLE_NAME'])
 
@@ -16,10 +17,12 @@ class DecimalEncoder(json.JSONEncoder):
             return float(obj)
         return super(DecimalEncoder, self).default(obj)
 
+# This is the Entry point for Lambda function
 def lambda_handler(event, context):
     """
-    Main Lambda handler for query operations
-    Demonstrates different query patterns in DynamoDB
+    This Lambda handler for query operations uses query patterns in DynamoDB.
+    Dispatches incoming query requests based on 'operation' query param.
+    This is DynamoDB access patterns without exposing internal implementation details.
     """
     try:
         query_params = event.get('queryStringParameters', {}) or {}
@@ -46,7 +49,7 @@ def lambda_handler(event, context):
         }
 
 def get_available_operations():
-    """Return available query operations"""
+    """Return available query operations for client introspection, making the endpoint self-documenting."""
     return {
         'statusCode': 200,
         'body': json.dumps({
@@ -80,7 +83,7 @@ def get_available_operations():
             }
         })
     }
-
+# to get the most recent version of a user
 def query_by_user(user_id):
     """Query for a specific user (latest version)"""
     try:
@@ -116,6 +119,7 @@ def query_by_user(user_id):
             'body': json.dumps({'error': str(e)})
         }
 
+# This Query handler lookup user(s) by email via GSI 
 def query_by_email(email):
     """Query user by email using Global Secondary Index"""
     try:
@@ -150,7 +154,7 @@ def query_by_email(email):
             'statusCode': 500,
             'body': json.dumps({'error': str(e)})
         }
-
+# This scan handler retrieve users within an age range
 def scan_by_age(min_age, max_age):
     """Scan table filtering by age range"""
     try:
@@ -189,7 +193,7 @@ def scan_by_age(min_age, max_age):
             'statusCode': 500,
             'body': json.dumps({'error': str(e)})
         }
-
+# This handler gets full history (versions) for a user
 def query_user_history(user_id):
     """Get all versions/history of a specific user"""
     try:
@@ -226,8 +230,9 @@ def query_user_history(user_id):
             'body': json.dumps({'error': str(e)})
         }
 
+# This handler gets users created in the last N hours
 def query_recent_users(hours):
-    """Get users created in the last N hours"""
+  
     try:
         hours = int(hours) if hours else 24
         
