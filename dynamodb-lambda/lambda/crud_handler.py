@@ -12,7 +12,10 @@ table = dynamodb.Table(os.environ['TABLE_NAME'])
 
 class DecimalEncoder(json.JSONEncoder):
     """Custom JSONEncoder to convert Decimal types to float.
-        DynamoDB stores numbers as Decimal by default."""
+        DynamoDB stores numbers as Decimal by default.
+        DynamoDB storing floats as Decimals which are not able to be encoded by json.dumps(). 
+        Now update your json.dumps() code to include cls=DecimalEncoder and the issue should be resolved!
+        """
     def default(self, obj):
         if isinstance(obj, Decimal):
             return float(obj)
@@ -88,7 +91,8 @@ def create_user(event):
                 'user': user_item
             }, cls=DecimalEncoder)
         }
-        
+        #response = {"statusCode":201,"body":json.dumps(response["Item"],cls=DecimalEncoder)}
+        #errorMessage: Object of type Decimal is not JSON serializable
     except KeyError as e:
         return {
             'statusCode': 400,
