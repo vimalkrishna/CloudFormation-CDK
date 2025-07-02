@@ -10,6 +10,10 @@ See the companion [Git Repository](https://github.com/vimalkrishna/CloudFormatio
 and Blog to discuss [implementation](https://aws-cloud-deployment.blogspot.com/2025/06/dynamodb-lambda-cdk-1.html)
  and improvement plans.
 
+**Basic architecture diagram** (created using draw.io)
+
+![Arch diagram](img/DynamoDB-APIGateway.drawio.svg)
+
 ## Project components:
 1. CDK Stack - Creates DynamoDB table with GSI and Lambda functions
 2. Three Lambda Functions:
